@@ -1,0 +1,27 @@
+body,p,td {
+	font-family: Arial, helvetica, sans-serif;
+	font-size: 10pt;
+	margin: 0.25em 0 0;
+}
+
+dt {
+	font-style: italic;
+}
+
+body {
+	margin: 3px;
+}
+
+h1 {
+	font-size: 1.4em;
+	margin-bottom: 5px;
+}
+
+h2 {
+	font-size: 1.2em;
+}
+
+h1,h2,h3,h4,h5,h6 {
+	margin: 0.75em 0 0;
+	padding: 0;
+}

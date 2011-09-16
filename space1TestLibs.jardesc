@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<jardesc>
+    <jar path="C:/Jakarta/Tomcat5.5.23/eclipse/space1/othr/debugMail.jar"/>
+    <options buildIfNeeded="true" compress="true" descriptionLocation="/MailSaver/space1TestLibs.jardesc" exportErrors="true" exportWarnings="true" includeDirectoryEntries="true" overwrite="false" saveDescription="true" storeRefactorings="false" useSourceFolders="false"/>
+    <storedRefactorings deprecationInfo="true" structuralOnly="false"/>
+    <selectedProjects/>
+    <manifest generateManifest="true" manifestLocation="/MailSaver/src/META-INF/MANIFEST.MF" manifestVersion="1.0" reuseManifest="false" saveManifest="false" usesManifest="true">
+        <sealing sealJar="true">
+            <packagesToSeal>
+                <package handleIdentifier="=MailSaver/src&lt;biz.infored.utils.debug.mail"/>
+            </packagesToSeal>
+            <packagesToUnSeal/>
+        </sealing>
+    </manifest>
+    <selectedElements exportClassFiles="true" exportJavaFiles="false" exportOutputFolder="false">
+        <javaElement handleIdentifier="=MailSaver/src"/>
+    </selectedElements>
+</jardesc>
