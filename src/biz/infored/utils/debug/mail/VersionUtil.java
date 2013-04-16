@@ -15,7 +15,7 @@ class VersionUtil
 		if (source == null)
 			return null;
 		final String found = getAll(source);
-		return found.startsWith("1.") ? found.substring(2) : found;
+		return found == null ? source : found.startsWith("1.") ? found.substring(2) : found;
 	}
 
 	public static String getAll(final String source)
