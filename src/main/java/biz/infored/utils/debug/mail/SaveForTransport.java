@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
@@ -532,9 +533,10 @@ public class SaveForTransport extends Transport {
 				final String propertyfile) throws IOException {
 			Config config = null;
 			final URL resource = classLoader.getResource(propertyfile);
+			Properties p = null;
 			if (resource != null) {
 				final InputStream openStream = resource.openStream();
-				final Properties p = new Properties();
+				p = new Properties();
 				try {
 					p.load(openStream);
 				} finally {
@@ -543,41 +545,65 @@ public class SaveForTransport extends Transport {
 					} catch (final IOException e) {
 					}
 				}
-				final String allows = p.getProperty("allow");
-				if (allows != null) {
-					final String[] allowRules = COMMASPACE.split(allows);
-					for (final String allowRule : allowRules)
-						if (allowRule.length() > 0) {
-							Pattern rule;
-							try {
-								rule = Pattern.compile(allowRule);
-								if (config == null)
-									config = new Config();
-								config.addRule(rule);
-							} catch (final Exception e) {
-								log.warn("allowRule: " + allowRule, e);
-							}
+			}
+			config = processAllow(config, getAllows(p));
+			config = processReplace(config, getReplace(p));
+			return config;
+		}
+
+		private static String getAllows(final Properties p) {
+			String allows = p == null ? null : p.getProperty("allow");
+			if (allows == null)
+				allows = System.getProperty("debugMail.allow");
+			return allows;
+		}
+
+		private static String getReplace(final Properties p) {
+			String replace = p == null ? null : p.getProperty("replace");
+			if (replace == null) {
+				replace = System.getProperty("debugMail.replace");
+			}
+			return replace;
+		}
+
+		private static Config processAllow(Config config, String allows) {
+			if (allows != null) {
+				final String[] allowRules = COMMASPACE.split(allows);
+				for (final String allowRule : allowRules)
+					if (allowRule.length() > 0) {
+						Pattern rule;
+						try {
+							rule = Pattern.compile(allowRule);
+							if (config == null)
+								config = new Config();
+							config.addRule(rule);
+						} catch (final Exception e) {
+							log.warn("allowRule: " + allowRule, e);
 						}
-				}
-				final String replace = p.getProperty("replace");
-				if (replace != null) {
-					final String[] replacements = COMMASPACE.split(replace);
-					for (final String replacement : replacements) {
-						final String[] parts = BAR.split(replacement);
-						final InternetAddress address = new InternetAddress();
-						String addr;
-						if (parts.length > 1) {
-							addr = parts[1].trim();
-							address.setPersonal(parts[0].trim());
-						} else
-							addr = parts[0].trim();
-						if (addr.length() == 0)
-							continue;
-						address.setAddress(addr);
-						if (config == null)
-							config = new Config();
-						config.addReplacement(address);
 					}
+			}
+			return config;
+		}
+
+		private static Config processReplace(Config config, String replace)
+				throws UnsupportedEncodingException {
+			if (replace != null) {
+				final String[] replacements = COMMASPACE.split(replace);
+				for (final String replacement : replacements) {
+					final String[] parts = BAR.split(replacement);
+					final InternetAddress address = new InternetAddress();
+					String addr;
+					if (parts.length > 1) {
+						addr = parts[1].trim();
+						address.setPersonal(parts[0].trim());
+					} else
+						addr = parts[0].trim();
+					if (addr.length() == 0)
+						continue;
+					address.setAddress(addr);
+					if (config == null)
+						config = new Config();
+					config.addReplacement(address);
 				}
 			}
 			return config;
