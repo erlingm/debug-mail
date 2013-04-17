@@ -1,1 +1,0 @@
-protocol=smtp; type=transport; class=biz.infored.utils.debug.mail.SaveForTransport; vendor=InfoRed AS;
