@@ -1,15 +1,14 @@
 <!DOCTYPE html>
 <html lang="nb">
-	<head>
-		<title>readme.html</title>
+<head>
+<title>readme.html</title>
 
-		<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
-		<meta http-equiv="description" content="this is my page">
-		<meta http-equiv="content-type"
-			content="text/html; charset=ISO-8859-1">
+<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+<meta http-equiv="description" content="this is my page">
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
 
-		<!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
-		<style type="text/css">
+<!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
+<style type="text/css">
 body,p,td {
 	font-family: sans-serif;
 	font-size: 10pt;
@@ -23,194 +22,121 @@ dl {
 	margin-left: 3em;
 }
 </style>
-	</head>
+</head>
 
-	<body>
-		&copy; 2007-2012 InfoRed AS
-		<h1>
-			Konfigurasjonsveiledning
-		</h1>
-		<p>
-			Dette biblioteket kan benyttes for &aring; kontrollere utg&aring;ende
-			e-post fra Tomcat (og kanskje ogs&aring; andre servlet-containers,
-			det er kun testet under Tomcat 5.x - 7.x). N&aring;r dette biblioteket er
-			installert, blir utg&aring;ende e-post lagret i en lokal mappe, i
-			stedet for eller i tillegg til &aring; bli sendt.
-		</p>
-		<h2>
-			Adresse-regler
-		</h2>
-		<p>
-			Hvis biblioteket blir konfigurert for å tillatte å sende e-post, blir
-			alle (smtp) adresser kontrollert mot to regler. Disse er:
-		</p>
-		<dl>
-			<dt>
-				allow
-			</dt>
-			<dd>
-				En eller flere
-				<strong>regex</strong> uttrykk som hver e-post adresse sjekkes mot,
-				bare hvis regelen matcher, blir e-post adressen benyttet.
-			</dd>
-			<dt>
-				replace
-			</dt>
-			<dd>
-				en eller flere e-post adresser som skal motta meldingen
-			</dd>
-		</dl>
-		<p>
-			Reglene leses fra en java properties fil, kalt
-			<code>
-				debugMail.properties
-			</code>
-			som skal ligge i
-			<code>
-				CLASSPATH.
-			</code>
-			Man kan ha en felles regel-fil for flere applikasjoner, eller en egen
-			for hver applikasjon.
-			<br>
-			Innstillingen allow skal inneholde en liste over regex regler som
-			hver adresse m&aring; tilfredsstille for at meldingen skal bli sendt
-			til den adressen, og der hvert regex uttrykk er adskilt med komma.
-			<br>
-			Innstillingen replace skal inneholde en liste over e-post adresser i
-			standard format som skal brukes i tillegg til eller i stedet for
-			adressene som hentes fra meldingen, adskilt med komma.
-			<br>
-		</p>
-		<p>
-			Eksempel p&aring; regelfil:
-		</p>
-		<pre>
+<body>
+	&copy; 2007-2012 InfoRed AS
+	<h1>Konfigurasjonsveiledning</h1>
+	<p>Dette biblioteket kan benyttes for &aring; kontrollere
+		utg&aring;ende e-post fra Tomcat (og kanskje ogs&aring; andre
+		servlet-containers, det er kun testet under Tomcat 5.x - 7.x).
+		N&aring;r dette biblioteket er installert, blir utg&aring;ende e-post
+		lagret i en lokal mappe, i stedet for eller i tillegg til &aring; bli
+		sendt.</p>
+	<h2>Adresse-regler</h2>
+	<p>Hvis biblioteket blir konfigurert for å tillatte å sende e-post,
+		blir alle (smtp) adresser kontrollert mot to regler. Disse er:</p>
+	<dl>
+		<dt>allow</dt>
+		<dd>
+			En eller flere <strong>regex</strong> uttrykk som hver e-post adresse
+			sjekkes mot, bare hvis regelen matcher, blir e-post adressen
+			benyttet.
+		</dd>
+		<dt>replace</dt>
+		<dd>en eller flere e-post adresser som skal motta meldingen</dd>
+	</dl>
+	<p>
+		Reglene leses fra en java properties fil, kalt
+		<code> debugMail.properties </code>
+		som skal ligge i
+		<code> CLASSPATH. </code>
+		Man kan ha en felles regel-fil for flere applikasjoner, eller en egen
+		for hver applikasjon. <br> Innstillingen allow skal inneholde en
+		liste over regex regler som hver adresse m&aring; tilfredsstille for
+		at meldingen skal bli sendt til den adressen, og der hvert regex
+		uttrykk er adskilt med komma. <br> Innstillingen replace skal
+		inneholde en liste over e-post adresser i standard format som skal
+		brukes i tillegg til eller i stedet for adressene som hentes fra
+		meldingen, adskilt med komma. <br>
+	</p>
+	<p>Eksempel p&aring; regelfil:</p>
+	<pre>
 			allow=.+\@infored\.no
 			replace=erling.molde@infored.no,arild.palm@infored.no,per-ivar.larsen@kommuneforlaget.no
 		</pre>
-		<p>
-			I ovenstående eksempel, vil melding bli sendt til alle adresser som
-			ender med
-			<code>
-				@infored.no
+	<p>
+		I ovenstående eksempel, vil melding bli sendt til alle adresser som
+		ender med
+		<code>@infored.no</code>
+		i meldingen, samt til adressene
+		<code>erling.molde@infored.no, arild.palm@infored.no</code>
+		og
+		<code>per-ivar.larsen@kommuneforlaget.no.</code>
+		Hvis reglene medfører at samme adresse forekommer to eller flere
+		ganger, blir meldingen sendt kun en gang til hver adresse.
+	</p>
+	<p>
+		Reglene kan også legges inn som "system properties", med prefiks "<code>debugMail.</code>", slik:
+		<code>-DdebugMail.replace=</code>... og
+		<code>-DdebugMail.allow=</code>...
+	</p>
+	<p>Hvis det ikke kan lokaliseres en regelfil, eller hvis regel-fila
+		mangler disse innstillingene (eller de er tomme), blir e-post ikke
+		sendt.</p>
+	<h2>Lagring</h2>
+	<p>
+		Alle utg&aring;ende meldinger blir lagret. Lagringen skjer som
+		standard til en &quot;nabo-mappe&quot; til den mappen som er
+		konfigurert via
+		<code> java.io.tmpdir </code>
+		for systemet. &quot;Nabo-mappen&quot; har standard-navnet
+		<code> mailSaved </code>
+	</p>
+	<p>Man kan konfigurere systemet til &aring; bruke en annen mappe
+		p&aring; en av f&oslash;lgende m&aring;ter:</p>
+	<ul>
+		<li>I <code> server.xml </code> (gjelder for Tomcat), i
+			konfigureringen av den globale mail-sesjonen, som en ekstra property
+			med navnet <code> infored.mailfolder </code> der verdien er mappen
+			som skal benyttes
+		</li>
+		<li>som en <em>system property</em>, med navnet <code>
+				infored.mailfolder </code> der verdien er mappen som skal benyttes
+		</li>
+		<li>I en property fil med navn <code>
+				infored.mailfolder.properties </code> og som m&aring; inneholde en property
+			med navn <code> infored.mailfolder </code> der verdien er mappen som
+			skal benyttes
+		</li>
+		<li>I en nabo-mappe til mappen konfigurert i systemet via <em>system
+				property</em> <code> java.io.tmpdir </code> kalt <code> mailSaved
 			</code>
-			i meldingen, samt til adressene
-			<code>
-				erling.molde@infored.no, arild.palm@infored.no
-			</code>
-			og
-			<code>
-				per-ivar.larsen@kommuneforlaget.no.
-			</code>
-			Hvis reglene medfører at samme adresse forekommer to eller flere
-			ganger, blir meldingen sendt kun en gang til hver adresse.
-		</p>
-		<p>
-			Hvis det ikke kan lokaliseres en regelfil, eller hvis regel-fila
-			mangler disse innstillingene (eller de er tomme), blir e-post ikke
-			sendt.
-		</p>
-		<h2>
-			Lagring
-		</h2>
-		<p>
-			Alle utg&aring;ende meldinger blir lagret. Lagringen skjer som
-			standard til en &quot;nabo-mappe&quot; til den mappen som er
-			konfigurert via
-			<code>
-				java.io.tmpdir
-			</code>
-			for systemet. &quot;Nabo-mappen&quot; har standard-navnet
-			<code>
-				mailSaved
-			</code>
-		</p>
-		<p>
-			Man kan konfigurere systemet til &aring; bruke en annen mappe
-			p&aring; en av f&oslash;lgende m&aring;ter:
-		</p>
-		<ul>
-			<li>
-				I
-				<code>
-					server.xml
-				</code>
-				(gjelder for Tomcat), i konfigureringen av den globale
-				mail-sesjonen, som en ekstra property med navnet
-				<code>
-					infored.mailfolder
-				</code>
-				der verdien er mappen som skal benyttes
-			</li>
-			<li>
-				som en
-				<em>system property</em>, med navnet
-				<code>
-					infored.mailfolder
-				</code>
-				der verdien er mappen som skal benyttes
-			</li>
-			<li>
-				I en property fil med navn
-				<code>
-					infored.mailfolder.properties
-				</code>
-				og som m&aring; inneholde en property med navn
-				<code>
-					infored.mailfolder
-				</code>
-				der verdien er mappen som skal benyttes
-			</li>
-			<li>
-				I en nabo-mappe til mappen konfigurert i systemet via
-				<em>system property</em>
-				<code>
-					java.io.tmpdir
-				</code>
-				kalt
-				<code>
-					mailSaved
-				</code>
-			</li>
-			<li>
-				I mappen konfigurert i systemet via
-				<em>system property</em>
-				<code>
-					java.io.tmpdir
-				</code>
-				(brukes hvis det ikke er mulig &aring; bruke forrige alternativ)
-				<br>
-			</li>
-		</ul>
-		<h2>
-			For Tomcat gjelder
-		</h2>
-		<p>
-			N&aring;r benyttet under Tomcat, skal biblioteket plasseres i en del
-			av
-			<code>
-				CLASSPATH
-			</code>
-			som er tilgjengelig samtidig som bibliotekene
-			<code>
-				mail.jar
-			</code>
-			og
-			<code>
-				activation.jar
-			</code>
-			&ndash; spesielt hvis Tomcat er konfigurert for &aring; tilby
-			smtp-tjenesten via en global JNDI-ressurs.
-		</p>
-		<p>
-			&Aring;rsaken til dette er at javax.mail.Session instansieres
-			n&aring;r Tomcat starter, og som en del av initialiseringen av denne,
-			blir konfigurasjonen av e-post systemet s&oslash;kt etter og lest
-			(fra fila
-			<code>
-				/META-INF/javamail.providers
-			</code>
-			).
-		</p>
-	</body>
+		</li>
+		<li>I mappen konfigurert i systemet via <em>system property</em>
+			<code> java.io.tmpdir </code> (brukes hvis det ikke er mulig &aring;
+			bruke forrige alternativ) <br>
+		</li>
+	</ul>
+	<h2>For Tomcat gjelder</h2>
+	<p>
+		N&aring;r benyttet under Tomcat, skal biblioteket plasseres i en del
+		av
+		<code> CLASSPATH </code>
+		som er tilgjengelig samtidig som bibliotekene
+		<code> mail.jar </code>
+		og
+		<code> activation.jar </code>
+		&ndash; spesielt hvis Tomcat er konfigurert for &aring; tilby
+		smtp-tjenesten via en global JNDI-ressurs.
+	</p>
+	<p>
+		&Aring;rsaken til dette er at javax.mail.Session instansieres
+		n&aring;r Tomcat starter, og som en del av initialiseringen av denne,
+		blir konfigurasjonen av e-post systemet s&oslash;kt etter og lest (fra
+		fila
+		<code> /META-INF/javamail.providers </code>
+		).
+	</p>
+</body>
 </html>
