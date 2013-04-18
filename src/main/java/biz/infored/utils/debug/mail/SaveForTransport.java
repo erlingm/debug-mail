@@ -47,6 +47,7 @@ public class SaveForTransport extends Transport {
 	private static final String version = VersionUtil.get("$Revision: 1.12 $");
 	private static final String JAVA_IO_TMPDIR = "java.io.tmpdir";
 	private static final String INFORED_BASEDIR = "infored.mailfolder";
+	private static final String DEBUGMAIL_BASEDIR = "debugMail.mailfolder";
 	private static final String MAIL_SAVED = "../mailSaved";
 	private File baseDir;
 	private int maxFilenameLength;
@@ -78,7 +79,9 @@ public class SaveForTransport extends Transport {
 				baseDir = this.session.getProperty(INFORED_BASEDIR);
 				break;
 			case 1:
-				baseDir = System.getProperty(INFORED_BASEDIR);
+				baseDir = System.getProperty(DEBUGMAIL_BASEDIR);
+				if (baseDir == null)
+					baseDir = System.getProperty(INFORED_BASEDIR);
 				break;
 			case 2:
 				final String name1 = INFORED_BASEDIR + ".properties";
