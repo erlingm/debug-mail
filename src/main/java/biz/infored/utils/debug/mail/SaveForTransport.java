@@ -212,6 +212,8 @@ public class SaveForTransport extends Transport {
 		LOG.info("Sendt til: " + Arrays.toString(addresses));
 		LOG.info("Melding lagres som: " + destFile);
 
+		config.amendSubject(message);
+
 		Address[] realAddresses = null;
 		if (realSend)
 			realAddresses = config.filter(addresses);
@@ -488,6 +490,7 @@ public class SaveForTransport extends Transport {
 
 		private final List<Pattern> rules = new ArrayList<Pattern>();
 		private final List<InternetAddress> replacements = new ArrayList<InternetAddress>();
+		private String subjectPrefix;
 		static final Config NULL = new Config();
 
 		Address[] filter(final Address[] addresses) {
@@ -515,6 +518,18 @@ public class SaveForTransport extends Transport {
 				}
 			}
 			return list.toArray(new Address[list.size()]);
+		}
+
+		void amendSubject(Message message) {
+			if (subjectPrefix != null) {
+				try {
+					String origSubject = message.getSubject();
+					String subject = subjectPrefix + ' ' + origSubject;
+					message.setSubject(subject);
+				} catch (MessagingException e) {
+					log.warn("Amend subject failed: " + e.getMessage(), e);
+				}
+			}
 		}
 
 		private Config() {
@@ -551,7 +566,16 @@ public class SaveForTransport extends Transport {
 			}
 			config = processAllow(config, getAllows(p));
 			config = processReplace(config, getReplace(p));
+			if (config != null) {
+				String subjectPrefix = getSubjectPrefix(p);
+				if (subjectPrefix != null && subjectPrefix.length() > 0)
+					config.setSubjectPrefix(subjectPrefix);
+			}
 			return config;
+		}
+
+		private void setSubjectPrefix(String subjectPrefix) {
+			this.subjectPrefix = subjectPrefix;
 		}
 
 		private static String getAllows(final Properties p) {
@@ -567,6 +591,15 @@ public class SaveForTransport extends Transport {
 				replace = System.getProperty("debugMail.replace");
 			}
 			return replace;
+		}
+
+		private static String getSubjectPrefix(Properties p) {
+			String pfx = p == null ? null : p.getProperty("subjectPrefix");
+			if (pfx == null)
+				pfx = System.getProperty("debugMail.subjectPrefix");
+			if (pfx != null)
+				pfx = pfx.trim();
+			return pfx;
 		}
 
 		private static Config processAllow(Config config, String allows) {
