@@ -212,8 +212,6 @@ public class SaveForTransport extends Transport {
 		LOG.info("Sendt til: " + Arrays.toString(addresses));
 		LOG.info("Melding lagres som: " + destFile);
 
-		config.amendSubject(message);
-
 		Address[] realAddresses = null;
 		if (realSend)
 			realAddresses = config.filter(addresses);
@@ -250,6 +248,8 @@ public class SaveForTransport extends Transport {
 					null, null, message);
 		}
 
+		config.amendSubject(message);
+		
 		if (realSend)
 			originalTransport.sendMessage(message, realAddresses);
 
