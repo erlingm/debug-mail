@@ -1,1 +1,1 @@
-protocol=smtp; type=transport; class=biz.infored.utils.debug.mail.SaveForTransport; vendor=InfoRed AS;
+protocol=smtp; type=transport; class=no.moldesoft.utils.debug.mail.SaveForTransport; vendor=MoldeSoft AS;

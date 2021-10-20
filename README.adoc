@@ -1,0 +1,67 @@
+= README
+Erling Molde <erling.molde@moldesoft.no>
+:description: How to use this library
+
+This library can be used to control outgoing e-mail from Tomcat (and possibly other
+servlet-containers, it has only been tested with Tomcat).
+
+== Configuration guide
+
+=== Address rules
+
+If this library is configured to send e-mail (without configuration, no mail will be sent),
+all (SMTP) addresses will be subject to two rules. These are:
+
+allow::
+One or more *_regex_* expressions which each address will be checked against; only if it
+matches, the address will be used
+
+replace::
+One or more e-mail addresses which will receive the e-mail
+
+subjectPrefix::
+Text to be placed at beginning of the subject before the e-mail is sent
+
+Rules are read from a Java properties file, called `debugMail.properties`, which must be
+placed in the _classpath_ alongside the library. If the library is placed outside the
+application (in Tomcat`'s `lib` or `shared` folder, for instance), to be shared by all
+applications run by Tomcat, then the `debugMail.properties` must be placed there as well.
+
+The property `allow` contains a list of *_regex_* rules which each address must pass to be included in the resulting address list, and the *_regex_* rules must be separated from each other by a comma (,).
+
+.Example of a rules file
+====
+----
+allow=.+\@moldesoft\.no
+replace=john.doe@example.com,jane.doe@example.com
+----
+====
+
+In the preceding example, the message will be sent to all addresses ending with
+@moldesoft.no from the message, as well as to the addresses `+john.doe@example.com+` and `+jane.doe@example.com+`.
+
+If the result of the rule processing contains the same address multiple times, the message will only be sent once to each address.
+
+The rules can also be added as _System properties_ prefixed with `debugMail.`, like this: +
+``-DdebugMail.allow=``… and ``-DdebugMail.replace=``…
+
+If no rule file is found, or if the rule file does not contain these properties, or they are empty, *no e-mail will be sent*.
+
+== Storage
+
+All outgoing messages are stored. The storage folder is normally a sibling folder to the
+folder configured by the system property `java.io.tmpdir` for the JVM. The sibling folder has
+the default name of `mailSaved`.
+
+However, it is possible to configure another location for the storage. These alternatives are available:
+
+. Read location from property named `no.moldesoft.mailfolder` in the mail session object.
+. If not found, then read location from system property `debugMail.mailfolder`.
+. If not found, then read location from system property `no.moldesoft.mailfolder`.
+. If not found, then locate properties file from classpath root with name `no.moldesoft.mailfolder.properties`.
+  .. If not found, then locate properties file from classpath within `package no.moldesoft.utils.debug` with name `no.moldesoft.mailfolder.properties`.
+  .. If properties file found, read location from property `no.moldesoft.mailfolder`
+  .. If property not found, read location from property `debugMail.mailfolder`
+. If not found, then read location from system property `java.io.tmpdir`
+  .. Attempt to create sibling folder for storage
+  .. If failed, use temp folder
