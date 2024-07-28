@@ -1,0 +1,61 @@
+= debugMail howto
+
+Ved &aring; plassere jar-fila som inneholder denne koden i classpath
+for f.eks. Tomcat, vil e-post som sendes ut fra applikasjonene bli
+rutet slik at de ikke g&aring;r til de av applikasjonen oppsatte
+mottager-adressene, men blir lagret i en fil i en lokal mappe. Hver
+applikasjon kan ha sitt eget oppsett, men biblioteket m&aring;
+v&aelig;re felles for alle applikasjoner, dette skyldes at
+bibliotekets navn initieres f&oslash;r applikasjonene initialiseres
+(dette gjelder for Tomcat, og muligens ogs&aring; for andre servlet
+containere).
+
+== Meldingslager
+
+Meldinger lagres i en mappe, hver melding lagres i sin egen fil.
+Hvor mappa skal ligge, er en konfigurerbar innstilling.
+
+Biblioteket leter etter en
+`property` med navnet
+*infored.mailfolder* p&aring; f&oslash;lgende steder,
+og i denne rekkef&oslash;lgen, og kravet for at verdien skal regnes
+som funnet, er at mappen som
+``property``en peker p&aring;, er tilgjengelig og skrivbar:
+
+. Session properties (`javax.mail.Session`)
+. System properties (`java.lang.System`)
+. Property-fila `infored.mailfolder.properties` i classpath for gjeldende eksekveringstråds classloader
+
+Hvis ikke dette fører fram, forsøker biblioteket å lese `System property` `java.io.tmpdir` og etablere en skrivbar mappe kalt `mailSaved` ved siden av denne mappen.
+Hvis heller ikke dette fører fram, benyttes mappen angitt av `System property` `java.io.tmpdir` direkte som lagringssted for filene.
+
+== Regler
+
+Regler for behandling av adresser kan påvirkes gjennom to `property` innstillinger i `property` fila `debugMail.properties`.
+
+De to `property` settingene er:
+
+allow=:: Her skal det stå en komma-separert liste over _regex_ uttrykk som angir lovlige adresser fra
+applikasjonen, dvs. adresser som matcher en eller flere av disse
+reglene, blir sendt til disse adressene. _Regex_ uttrykkene må
+tilfredsstille hele adressen for å gi samsvar (metoden ``java.util.regex.Matcher.matches()`` blir benyttet i kontrollen).
+
+replace=:: Her kan man skrive inn en komma-separert liste over adresser som
+skal motta meldingen _i tillegg til_ de adressene som tilfredsstiller __allow__-reglene.
++
+Hver adresse kan være en ren internett-adresse, eller en kombinert
+fritekst og internett-adresse adskilt med ``bar``-tegn ({vbar}).
++
+====
+Eksempel:
+
+----
+replace=erling.molde@gmail.com, Erling fra InfoRed|erling.molde@infored.no, \
+  Erling privat|erling.molde@online.no
+----
+====
+
+Biblioteket sørger for at hver adresse bare blir brukt en gang, selv om adressen slipper
+gjennom flere ganger, f.eks. både via _allow_ og via _replace_.
+
+Dersom `debugMail.properties` ikke kan lokaliseres, eller ikke inneholder gyldige regler — _allow_ og/eller _replace_, blir ingen meldinger sendt.
