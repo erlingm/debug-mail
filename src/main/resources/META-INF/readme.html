@@ -2,13 +2,8 @@
 <html lang="nb">
 <head>
 <title>readme.html</title>
-
-<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
-<meta http-equiv="description" content="this is my page">
-<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
-
-<!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
-<style type="text/css">
+<meta charset="UTF-8">
+<style>
 body,p,td {
 	font-family: sans-serif;
 	font-size: 10pt;
@@ -25,16 +20,16 @@ dl {
 </head>
 
 <body>
-	&copy; 2007-2012 InfoRed AS
+	2014-2021 MoldeSoft AS
 	<h1>Konfigurasjonsveiledning</h1>
 	<p>Dette biblioteket kan benyttes for &aring; kontrollere
 		utg&aring;ende e-post fra Tomcat (og kanskje ogs&aring; andre
-		servlet-containers, det er kun testet under Tomcat 5.x - 7.x).
+		servlet-containers, det er kun testet under Tomcat 5.x - 9.x).
 		N&aring;r dette biblioteket er installert, blir utg&aring;ende e-post
 		lagret i en lokal mappe, i stedet for eller i tillegg til &aring; bli
 		sendt.</p>
 	<h2>Adresse-regler</h2>
-	<p>Hvis biblioteket blir konfigurert for å tillatte å sende e-post,
+	<p>Hvis biblioteket blir konfigurert for Ã¥ tillatte Ã¥ sende e-post,
 		blir alle (smtp) adresser kontrollert mot to regler. Disse er:</p>
 	<dl>
 		<dt>allow</dt>
@@ -46,7 +41,7 @@ dl {
 		<dt>replace</dt>
 		<dd>en eller flere e-post adresser som skal motta meldingen</dd>
 		<dt>subjectPrefix</dt>
-		<dd>Tekst som plasseres forrest i meldingens emne før eventuell sending</dd>
+		<dd>Tekst som plasseres forrest i meldingens emne fÃ¸r eventuell sending</dd>
 	</dl>
 	<p>
 		Reglene leses fra en java properties fil, kalt
@@ -68,18 +63,18 @@ dl {
 			replace=erling.molde@infored.no,arild.palm@infored.no,per-ivar.larsen@kommuneforlaget.no
 		</pre>
 	<p>
-		I ovenstående eksempel, vil melding bli sendt til alle adresser som
+		I ovenstÃ¥ende eksempel, vil melding bli sendt til alle adresser som
 		ender med
 		<code>@infored.no</code>
 		i meldingen, samt til adressene
 		<code>erling.molde@infored.no, arild.palm@infored.no</code>
 		og
 		<code>per-ivar.larsen@kommuneforlaget.no.</code>
-		Hvis reglene medfører at samme adresse forekommer to eller flere
+		Hvis reglene medfÃ¸rer at samme adresse forekommer to eller flere
 		ganger, blir meldingen sendt kun en gang til hver adresse.
 	</p>
 	<p>
-		Reglene kan også legges inn som "system properties", med prefiks "<code>debugMail.</code>", slik:
+		Reglene kan ogsÃ¥ legges inn som "system properties", med prefiks "<code>debugMail.</code>", slik:
 		<code>-DdebugMail.replace=</code>... og
 		<code>-DdebugMail.allow=</code>...
 	</p>
@@ -133,7 +128,7 @@ dl {
 		smtp-tjenesten via en global JNDI-ressurs.
 	</p>
 	<p>
-		&Aring;rsaken til dette er at javax.mail.Session instansieres
+		&Aring;rsaken til dette er at <code>javax.mail.Session</code> instansieres
 		n&aring;r Tomcat starter, og som en del av initialiseringen av denne,
 		blir konfigurasjonen av e-post systemet s&oslash;kt etter og lest (fra
 		fila

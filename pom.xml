@@ -50,4 +50,15 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+    <distributionManagement>
+        <repository>
+            <id>infored</id>
+            <url>http://lab.moldesoft.no/nexus/content/repositories/releases</url>
+        </repository>
+        <snapshotRepository>
+            <id>infored</id>
+            <url>http://lab.moldesoft.no/nexus/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <downloadUrl>http://lab.moldesoft.no/nexus/content/groups/infored</downloadUrl>
+    </distributionManagement>
 </project>
